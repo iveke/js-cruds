@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {  Repository } from 'typeorm';
 import { Product } from './entities/product.entity';
 
 @Injectable()
@@ -12,14 +16,13 @@ export class ProductService {
     private readonly productRepository: Repository<Product>,
   ) {}
 
-  async create(createProductDto: CreateProductDto, id: number) {
-
+  async create(createProductDto: CreateProductDto) {
     const isExist = await this.productRepository.findBy({
-      id: id,
+      id: createProductDto.id,
     });
 
-    if(!isExist){
-      throw new BadRequestException('this product have already been')
+    if (!isExist) {
+      throw new BadRequestException('this product have already been');
     }
 
     const newProduct = {
@@ -27,23 +30,49 @@ export class ProductService {
       name: createProductDto.name,
       price: createProductDto.price,
       description: createProductDto.description,
-    } 
+    };
     return await this.productRepository.save(newProduct);
   }
 
   async findAll() {
-    return 'hello this page can return you all products';
+    const products = await this.productRepository.find();
+
+    if (products.length < 0) {
+      throw new NotFoundException('products not found');
+    }
+
+    return products;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number) {
+    const product = await this.productRepository.findOne({
+      where: { id },
+    });
+
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const product = await this.productRepository.findOne({ where: { id } });
+
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+
+    await this.productRepository.update(id, updateProductDto);
+
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: number) {
+    const product = await this.productRepository.findOne({ where: { id } });
+
+    if (!product) {
+      throw new NotFoundException('product not found');
+    }
+    return await this.productRepository.delete(id);
   }
 }
