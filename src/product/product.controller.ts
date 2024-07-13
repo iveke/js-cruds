@@ -37,7 +37,8 @@ export class ProductController {
   }
 
   @Get('list/:productId')
-  findOne(@Param('productId') @GetProduct() product: ProductEntity) {
+  @UseGuards(ProductGuard)
+  findOne(@Param('productId') id:string, @GetProduct() product: ProductEntity) {
     return this.productService.findOne(product);
   }
 
