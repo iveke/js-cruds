@@ -24,7 +24,8 @@ export class ProductGuard implements CanActivate {
     if (!params) {
       throw new BadRequestException(PRODUCT_ERROR.GUARD);
     }
-
+    if(params.productId){
+      
     const product = await this.productRepository.findOne({
       where: { id: params.productID },
     });
@@ -35,5 +36,16 @@ export class ProductGuard implements CanActivate {
 
     request.product = product;
     return true;
+    } else {
+      const productList = await this.productRepository.find();
+
+      if (!productList) {
+        throw new BadRequestException(PRODUCT_ERROR.NOT_FOUND);
+      }
+  
+      request.productList = productList;
+      return true;
+    }
+
   }
 }

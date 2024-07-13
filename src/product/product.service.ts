@@ -14,29 +14,23 @@ import { ProductRepository } from './product.repository';
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
-    private readonly productRepository: Repository<ProductEntity>,
+    private readonly productRepository: ProductRepository,
   ) {}
 
   async create(createProductDto: CreateProductDto, product: ProductEntity) {
     // const productRepository = new ProductEntity();
 
-    // const productRepository = new ProductRepository();
-    // productRepository.createProduct(createProductDto)
+  await this.productRepository.createProduct(createProductDto);
 
-    const productRepository = new ProductRepository<ProductEntity>;
-    productRepository.createProduct(createProductDto);
+    // const productRepository = new ProductRepository<ProductEntity>;
+    // productRepository.createProduct(createProductDto);
     
-    return productRepository;
+    return product;
   }
 
-  async findAll(product: ProductEntity) {
-    const products = await this.productRepository.find();
+  async findAll(productList: ProductEntity) {
 
-    if (products.length < 0) {
-      throw new NotFoundException('products not found');
-    }
-
-    return products;
+    return productList;
   }
 
   async findOne(product: ProductEntity) {

@@ -1,4 +1,4 @@
-import { EntityManager, EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository } from 'typeorm';
 
 import { ProductEntity } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -37,4 +37,6 @@ export class ProductRepository extends Repository<ProductEntity> {
     await this.remove(product);
   }
 }
+
+
 

@@ -13,7 +13,7 @@ import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductGuard } from './guard/product.guard';
-import { GetProduct } from './get-product.decorator';
+import { GetProduct, GetProductList } from './get-product.decorator';
 import { ProductEntity } from './product.entity';
 
 @Controller('product')
@@ -27,17 +27,17 @@ export class ProductController {
     @GetProduct() product: ProductEntity,
   ) {
     console.log(product);
-    return this.productService.create(createProductDto,product);
+    return this.productService.create(createProductDto, product);
   }
 
   @Get('list')
   @UseGuards(ProductGuard)
-  findAll(@GetProduct() product: ProductEntity) {
-    return this.productService.findAll(product);
+  findAll(@GetProductList() productList: ProductEntity) {
+    return this.productService.findAll(productList);
   }
 
   @Get('list/:productId')
-  findOne(@GetProduct() product: ProductEntity) {
+  findOne(@Param('productId') @GetProduct() product: ProductEntity) {
     return this.productService.findOne(product);
   }
 
