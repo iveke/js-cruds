@@ -1,10 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString, Length } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class CreateProductDto {
-@IsNotEmpty()
-@Length(5)
-@IsNumber()
-id: number
 
 @IsNotEmpty()
 @IsString()

@@ -6,35 +6,30 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import {  Repository } from 'typeorm';
-import { Product } from './product.entity';
+import { Repository } from 'typeorm';
+import { ProductEntity } from './product.entity';
+import { ProductRepository } from './product.repository';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    @InjectRepository(ProductEntity)
+    private readonly productRepository: Repository<ProductEntity>,
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const isExist = await this.productRepository.findBy({
-      id: createProductDto.id,
-    });
+  async create(createProductDto: CreateProductDto, product: ProductEntity) {
+    // const productRepository = new ProductEntity();
 
-    if (!isExist) {
-      throw new BadRequestException('this product have already been');
-    }
+    // const productRepository = new ProductRepository();
+    // productRepository.createProduct(createProductDto)
 
-    const newProduct = {
-      id: createProductDto.id,
-      name: createProductDto.name,
-      price: createProductDto.price,
-      description: createProductDto.description,
-    };
-    return await this.productRepository.save(newProduct);
+    const productRepository = new ProductRepository<ProductEntity>;
+    productRepository.createProduct(createProductDto);
+    
+    return productRepository;
   }
 
-  async findAll() {
+  async findAll(product: ProductEntity) {
     const products = await this.productRepository.find();
 
     if (products.length < 0) {
@@ -44,14 +39,8 @@ export class ProductService {
     return products;
   }
 
-  async findOne(id: number) {
-    const product = await this.productRepository.findOne({
-      where: { id },
-    });
+  async findOne(product: ProductEntity) {
 
-    if (!product) {
-      throw new NotFoundException('product not found');
-    }
     return product;
   }
 

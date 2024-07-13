@@ -1,25 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductGuard } from './guard/product.guard';
+import { GetProduct } from './get-product.decorator';
+import { ProductEntity } from './product.entity';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Post('product-create')
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productService.create(createProductDto);
+  @Post()
+  @UseGuards(ProductGuard)
+  create(
+    @Body() createProductDto: CreateProductDto,
+    @GetProduct() product: ProductEntity,
+  ) {
+    console.log(product);
+    return this.productService.create(createProductDto,product);
   }
 
-  @Get('product-list')
-  findAll() {
-    return this.productService.findAll();
+  @Get('list')
+  @UseGuards(ProductGuard)
+  findAll(@GetProduct() product: ProductEntity) {
+    return this.productService.findAll(product);
   }
 
-  @Get(':id')
-  findOne(@Param('id' ) id: string) {
-    return this.productService.findOne(+id);
+  @Get('list/:productId')
+  findOne(@GetProduct() product: ProductEntity) {
+    return this.productService.findOne(product);
   }
 
   @Patch(':id')

@@ -1,10 +1,10 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 
-@Entity()
-export class Product {
+@Entity({name: "product"})
+export class ProductEntity {
 
-@PrimaryGeneratedColumn({name: 'product_id'})
+@PrimaryGeneratedColumn()
 id: number;
 
 @Column()
@@ -13,10 +13,10 @@ name: string;
 @Column()
 price: number;
 
-@Column()
+@Column({nullable: true, default: null})
 description: string;
 
 @CreateDateColumn()
-createDate: Date;
+createDate: string;
 
 }
