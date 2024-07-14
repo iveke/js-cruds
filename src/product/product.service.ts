@@ -18,7 +18,8 @@ export class ProductService {
   ) {}
 
   async create(createProductDto: CreateProductDto, product: ProductEntity) {
-    // const productRepository = new ProductEntity();
+    // const productReposito = new ();
+console.log(this.productRepository)
 
   await this.productRepository.createProduct(createProductDto);
 

@@ -9,7 +9,7 @@ export class ProductRepository extends Repository<ProductEntity> {
   async createProduct(
     createProductDto: CreateProductDto,
   ): Promise<ProductEntity> {
-    console.log(createProductDto);
+    // console.log(createProductDto);
     const product = new ProductEntity();
 
     if (createProductDto.name) {
