@@ -22,12 +22,8 @@ export class ProductController {
 
   @Post()
   @UseGuards(ProductGuard)
-  create(
-    @Body() createProductDto: CreateProductDto,
-    @GetProduct() product: ProductEntity,
-  ) {
-    // console.log(product);
-    return this.productService.create(createProductDto, product);
+  create(@Body() createProductDto: CreateProductDto) {
+    return this.productService.create(createProductDto);
   }
 
   @Get('list')
@@ -38,7 +34,10 @@ export class ProductController {
 
   @Get('list/:productId')
   @UseGuards(ProductGuard)
-  findOne(@Param('productId') id:string, @GetProduct() product: ProductEntity) {
+  findOne(
+    @Param('productId') id: string,
+    @GetProduct() product: ProductEntity,
+  ) {
     return this.productService.findOne(product);
   }
 

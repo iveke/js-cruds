@@ -19,19 +19,9 @@ export class ProductGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { params } = request;
-    console.log(request)
 
     if (!params) {
       throw new BadRequestException(PRODUCT_ERROR.GUARD);
-    }
-    if(params._url === ''){
-      const product = await this.productRepository.find();
-      if (!product) {
-        throw new BadRequestException(PRODUCT_ERROR.NOT_FOUND);
-      }
-  
-      request.product = product;
-      return true;
     }
     if(params.productId){
       

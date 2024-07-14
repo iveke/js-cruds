@@ -4,20 +4,23 @@ import { ProductEntity } from './product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
+
 @EntityRepository()
 export class ProductRepository extends Repository<ProductEntity> {
   async createProduct(
     createProductDto: CreateProductDto,
   ): Promise<ProductEntity> {
+    console.log('Hello you in ProductRepositoty');
     // console.log(createProductDto);
-    const product = new ProductEntity();
+    const product: ProductEntity = new ProductEntity();
 
     if (createProductDto.name) {
       product.name = createProductDto.name;
     }
     product.price = createProductDto.price;
     product.description = createProductDto.description;
-    return this.save(product);
+    await this.save(product);
+    return product;
   }
 
   async updateProduct(
@@ -29,14 +32,11 @@ export class ProductRepository extends Repository<ProductEntity> {
     }
     product.price = updateProductDto.price;
     product.description = updateProductDto.description;
-    
-    return await this.save(product) ;
+
+    return await this.save(product);
   }
 
   async deleteProduct(product: ProductEntity): Promise<void> {
     await this.remove(product);
   }
 }
-
-
-

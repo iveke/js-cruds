@@ -6,36 +6,36 @@ import {
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { ProductEntity } from './product.entity';
 import { ProductRepository } from './product.repository';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(ProductEntity)
+    @InjectRepository(ProductRepository)
     private readonly productRepository: ProductRepository,
   ) {}
 
-  async create(createProductDto: CreateProductDto, product: ProductEntity) {
+  async create(createProductDto: CreateProductDto): Promise<ProductEntity> {
+    console.log(this.productRepository);
     // const productReposito = new ();
-console.log(this.productRepository)
-
-  await this.productRepository.createProduct(createProductDto);
-
-    // const productRepository = new ProductRepository<ProductEntity>;
+    // console.log('its product.service 21code', this.productRepository);
+    console.log(createProductDto);
+    console.log(this);
+    const product =await (this.productRepository as ProductRepository).createProduct(createProductDto);
+    // const lolipop =
+    //   await this.productRepository.createProduct(createProductDto);
+    // const productRepository = newProductRepository<ProductEntity>;
     // productRepository.createProduct(createProductDto);
-    
-    return product;
+
+    return;
   }
 
   async findAll(productList: ProductEntity) {
-
     return productList;
   }
 
   async findOne(product: ProductEntity) {
-
     return product;
   }
 
@@ -46,7 +46,7 @@ console.log(this.productRepository)
       throw new NotFoundException('product not found');
     }
 
-    await this.productRepository.update(id, updateProductDto);
+    this.productRepository.update(id, updateProductDto);
 
     return `This action updates a #${id} product`;
   }
